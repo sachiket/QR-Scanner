@@ -27,9 +27,6 @@ class LoginPage extends StatefulWidget{
 class loginPageState extends State<LoginPage>{
  
 
-  String result = "Hey there !";
-  String val = "defult";
-
   Future _scanQR() async {
 
     try {
