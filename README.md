@@ -29,8 +29,12 @@ A new Flutter application.
  `<key>NSCameraUsageDescription</key>`
  
   `<string>Camera permission is required for barcode scanning.</string>`
-
-
+  
+### Commits
+* [ ] added a history tab
+* [ ] added a image picker tab
+  
+  
 ## Getting Started
 
 For help getting started with Flutter, view our online
