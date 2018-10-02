@@ -33,6 +33,7 @@ A new Flutter application.
 ### Commits
 * [ ] added a history tab
 * [ ] added a image picker tab
+<img src="images/commit.jpg" width="300" height="500">
   
   
 ## Getting Started
