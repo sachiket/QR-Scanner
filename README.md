@@ -8,8 +8,12 @@ A new Flutter application.
 <img src="images/44.png" width="300" height="500">
 
 
-### Features
+### Package decription 
+package name - barcode_scan
 
+package details - https://pub.dartlang.org/packages/barcode_scan
+
+package features -
 * [x] Scan 2D barcodes
 * [x] Scan QR codes
 * [x] Control the flash while scanning
