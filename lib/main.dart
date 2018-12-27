@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
+import 'history.dart';
+import 'result.dart';
+import 'package:qr_scanner/Model/Contact.dart';
+import 'package:qr_scanner/Database/DBHelper.dart';
 
 void main()=> runApp(new MyApp());
 
 class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-
-    // TODO: implement build
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
       home: new LoginPage(),
       theme: new ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blue ,
       ),
     );
   }
@@ -25,11 +26,14 @@ class LoginPage extends StatefulWidget{
   @override
   State createState() => new loginPageState();
 }
+
 class loginPageState extends State<LoginPage>{
+  Contact contact = new Contact();
+  String ans ;
   String result = "Hey there !";
   String val = "defult";
-
-
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
+  final key = new GlobalKey();
 
   Future _scanQR() async {
 
@@ -67,49 +71,62 @@ class loginPageState extends State<LoginPage>{
 
 
     }
-    Navigator.push(
+    this.ans=result;
+    submitcontact();
+    Navigator.push<bool>(
       context,
-      MaterialPageRoute(builder: (context) => new SecondScreen( val: result)),
-    );
+      MaterialPageRoute(builder: (context) => new SecondScreen(val: result)
+      ),
+    ).then((bool value){
+        if(value){
+           screen3();//storage: null , val: result );
+        }
+
+    });
   }
 
+  void submitcontact(){
+    var contact = Contact();
+    contact.result=ans;
+    var dbHelper = DBHelper();
+    dbHelper.addNewContact(contact);
 
 
+    return;
 
-void history()
-{
-
-  List<String> his= new  List(10);
-  his.add(result);
-  Navigator.push(
-  context,
-  MaterialPageRoute(builder: (context) => new screen3(val:his)),
-);}
-  picker() {
-
-      ImagePicker.pickImage(source: ImageSource.gallery);
-    }
-
+  }
 
   @override
+
   Widget build(BuildContext context) {
 
-
-    // TODO: implement build
     return new Scaffold(
-      appBar: new AppBar(
-        actions: <Widget>[
-          new IconButton(icon:new Icon(Icons.photo_album), onPressed: picker),
-          new IconButton(icon:new Icon(Icons.history), onPressed: history)
-        ],
-        title: new Text("QR scanner"),
-        backgroundColor: Colors.blue,
-        centerTitle: true,
-        //brightness: Brightness.dark,
-
-      ),
-
+      key: scaffoldKey,
       backgroundColor: Colors.black,
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('Menu'),
+              decoration: BoxDecoration(
+                color: Colors.blueAccent
+              ),
+            ),
+            ListTile(
+              title: Text('History'),
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => screen3()
+                  ),
+                );
+              },
+
+            ),
+          ],
+        ),
+      ),
       body: new Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -132,8 +149,10 @@ void history()
           )
         ],
       ),
+
       floatingActionButton: FloatingActionButton.extended(
         icon: Icon(Icons.camera),
+        key: key,
         label: Text("Scan"),
         onPressed: _scanQR,
       ),
@@ -146,42 +165,4 @@ void history()
 
 
 
-}
-class SecondScreen extends StatelessWidget {
-  String val;
-  SecondScreen({this.val});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Result"),
-      ),
-      body: Center(
-        child: new Text(val),
-
-      ),
-    );
-  }
-}
-class screen3 extends StatelessWidget {
-
-  List<String> val=new List(10);
-  screen3({this.val});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("history"),
-         // Removing the drop shadow cast by the app bar.
-      ),
-      body: new ListView.builder(
-        itemCount: val.length,
-        itemBuilder: (BuildContext ctxt, int index) {
-          return new Text(val[index]);
-        }
-
-      ),
-    );
-  }
 }
