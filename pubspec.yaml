@@ -21,6 +21,10 @@ dependencies:
   cupertino_icons: ^0.1.2
   barcode_scan:
   image_picker:
+  path_provider:
+  sqflite:
+  fluttertoast:
+
 
 
 dev_dependencies:
