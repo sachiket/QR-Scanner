@@ -1,143 +1,102 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
-//import 'package:path_provider/path_provider.dart';
-import 'dart:io';
-import 'dart:async';
-import 'package:qr_scanner/Database/DBHelper.dart';
+  import 'main.dart';
+  import 'dart:async';
+  import 'package:qr_scanner/Database/DBHelper.dart';
+  import 'package:qr_scanner/Model/Contact.dart';
 
 
-
-
-
-//class TextStorage {
-  //Future<String> get _localPath async {
-    //final directory = await getApplicationDocumentsDirectory();
-    //return directory.path;
-  //}
-
-  //Future<File> get _localFile async {
-    //final path = await _localPath;
-    //return File('$path/demo.txt');
-  //}
-
-  //Future<String> readFile() async {
-   // try {
-
-     // final file = await _localFile;
-
-      //String content = await file.readAsString();
-     // return content;
-    //} catch (e) {
-    //  return '';
-   // }
-//  }
-
- // Future<File> writeFile(String text) async {
-    //final file = await _localFile;
-   // return file.writeAsString('$text\r\n', mode: FileMode.append);
- // }
-
-  //Future<File> cleanFile() async {
-    //final file = await _localFile;
-    //return file.writeAsString('');
-  //}
-//}
-
-
-class screen3 extends StatefulWidget {
-  String val;
-  //final TextStorage storage;
-
-  //screen3({Key key, @required this.storage , this.val}) : super(key: key);
-  @override
-  State createState() => new state();
-}
-
-
-class state extends State<screen3>{
-  List<Widget> list = new List<Widget>();
-  List<Widget> list2 = new List<Widget>();
-
-
-
-
-  Future<List<Widget>> getContactsFromDB() async{
-    //List<Contact> contacts2 = new List();
+  Future<List<Contact>> getContactsFromDB() async{
     var dbHelper = DBHelper();
-    Future<List<Widget>> contacts = dbHelper.getResult();
-    list = await contacts;
-    return list;
+    Future<List<Contact>> contacts = dbHelper.getResult();
+    return contacts;
 
   }
 
-  //TextEditingController _textField = new TextEditingController();
-  String _content = '';
+  final controller_result = new TextEditingController();
 
-
-  @override
-  void initState()async{
-
-    list = await getContactsFromDB();
-    //list.add(new  ListTile(
-      //title: Text(widget.val,
-        //  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0)),
-      //leading: Icon(
-        //Icons.theaters,
-        //color: Colors.blue[500],
-      //),
-    //),);
-
-
-
-    //widget.storage.readFile().then((String val) {
-      //setState(() {
-        //_content = val;
-      //});
-    //});
-    //_writeStringToTextFile(widget.val);
-   // super.initState();
+  class screen3 extends StatefulWidget {
+    @override
+    State createState() => new state();
   }
 
- //Future<File> _writeStringToTextFile(String text) async {
-    //setState(() {
-      //_content += text + '\r\n';
-    //});
 
-    //return widget.storage.writeFile(_content);
-  //}
-  //Future<File> _clearContentsInTextFile() async {
-   // setState(() {
-     // _content = '';
-    //});
-
-    //return widget.storage.cleanFile();
-  //}
+  class state extends State<screen3>{
 
 
-  Widget build(BuildContext context) {
-    return WillPopScope(onWillPop: (){
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) =>   LoginPage()));
+    @override
 
-    } , child: Scaffold(
-      appBar: AppBar(
-        title: Text("history"),
-        // Removing the drop shadow cast by the app bar.
-      ),
-      body: Center(
-            child:new  ListView(
-              children: list,
 
+    Widget build(BuildContext context) {
+      return WillPopScope(onWillPop: (){
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>   LoginPage()));
+
+      } , child: Scaffold(
+        appBar: AppBar(
+          title: Text("history"),
+          actions: <Widget>[
+
+          ],
         ),
+        body: new Container(
+          padding: EdgeInsets.all(16.0),
+          child: FutureBuilder<List<Contact>>(
+              future: getContactsFromDB(),
+              builder: (context,snapshot){
+                if(snapshot.data !=null){
+                  if(snapshot.hasData){
+                    return ListView.builder(
+                        itemCount: snapshot.data.length ,
+                        itemBuilder: (context,index){
+                          return new Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: <Widget>[
+                                  Container(
+                                    padding: const EdgeInsets.only(bottom:16.0),
+                                    child: Text(
+                                      snapshot.data[index].result,
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                ],),
+                              ),
+
+                            ],
+                          );
+
+                    });
+                  }
+
+
+                }
+                return new Container(
+                  alignment: AlignmentDirectional.center,
+                  child: new CircularProgressIndicator(),
+                );
+              }
+
+
+
+          ),
+        )
+
+
       )
 
+        , );
 
-    )
 
-      , );
+
+    }
+
+    @override
+    void initState() {
+      super.initState();
+    }
+
 
   }
-
-}
