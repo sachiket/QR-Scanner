@@ -6,6 +6,8 @@ import 'history.dart';
 import 'result.dart';
 import 'package:qr_scanner/Model/Contact.dart';
 import 'package:qr_scanner/Database/DBHelper.dart';
+import 'package:qr_scanner/textfile/text.dart';
+import 'dart:io';
 
 void main()=> runApp(new MyApp());
 
@@ -23,6 +25,8 @@ class MyApp extends StatelessWidget{
 }
 
 class LoginPage extends StatefulWidget{
+  final TextStorage storage;
+  LoginPage({Key key, @required this.storage}) : super(key: key);
   @override
   State createState() => new loginPageState();
 }
@@ -34,6 +38,16 @@ class loginPageState extends State<LoginPage>{
   String val = "defult";
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final key = new GlobalKey();
+
+  String _content = '';
+
+  Future<File> _writeStringToTextFile(String text) async {
+    setState(() {
+      _content += text + '\r\n';
+    });
+
+    return widget.storage.writeFile(_content);
+  }
 
   Future _scanQR() async {
 
@@ -78,9 +92,9 @@ class loginPageState extends State<LoginPage>{
       MaterialPageRoute(builder: (context) => new SecondScreen(val: result)
       ),
     ).then((bool value){
-        if(value){
-           screen3();//storage: null , val: result );
-        }
+      if(value){
+        screen3();//storage: null , val: result );
+      }
 
     });
   }
@@ -90,11 +104,15 @@ class loginPageState extends State<LoginPage>{
     contact.result=ans;
     var dbHelper = DBHelper();
     dbHelper.addNewContact(contact);
+    if(ans.isNotEmpty){
+      _writeStringToTextFile(ans);
+    }
 
 
     return;
 
   }
+
 
   @override
 
@@ -110,7 +128,7 @@ class loginPageState extends State<LoginPage>{
             DrawerHeader(
               child: Text('Menu'),
               decoration: BoxDecoration(
-                color: Colors.blueAccent
+                  color: Colors.blueAccent
               ),
             ),
             ListTile(
