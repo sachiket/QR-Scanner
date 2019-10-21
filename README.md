@@ -1,6 +1,6 @@
 # qr_scanner
 
-A new Flutter application.
+A new Flutter application to scan QR_Code.
 ![](images/22.png)
 
 ### Screenshots of App
