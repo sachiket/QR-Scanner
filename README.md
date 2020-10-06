@@ -3,7 +3,7 @@
 A new Flutter application to scan QR_Code.
 ![](images/22.png)
 
-### Screenshots of App
+### Screenshots of Application
 <img src="images/33.png" width="300" height="500">
 <img src="images/44.png" width="300" height="500">
 
@@ -21,7 +21,7 @@ package features -
 * [ ] Support multiple barcode libraries
 
 ### Android 
- add a permission and a activity to AndroidManifest.xml
+ add the permission and the activity to AndroidManifest.xml
   
   `<uses-permission android:name="android.permission.CAMERA" />`
   
