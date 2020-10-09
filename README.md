@@ -11,7 +11,7 @@ A new Flutter application to scan QR_Code.
 ### Package decription 
 package name - barcode_scan
 
-package details - https://pub.dartlang.org/packages/barcode_scan
+[package details](https://pub.dartlang.org/packages/barcode_scan)
 
 package features -
 * [x] Scan 2D barcodes
