@@ -8,7 +8,7 @@ import 'package:qr_scanner/Model/Contact.dart';
 import 'package:qr_scanner/Database/DBHelper.dart';
 import 'package:qr_scanner/textfile/text.dart';
 import 'dart:io';
-
+// This is the homepage of the application
 void main()=> runApp(new MyApp());
 
 class MyApp extends StatelessWidget{
